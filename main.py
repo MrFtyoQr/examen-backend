@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from app.api import auth_routes
 from app.api import post_routes
 from app.api import comment_routes
+from app.api import reaction_routes
 
 app = FastAPI()
 
@@ -9,6 +10,7 @@ app = FastAPI()
 app.include_router(auth_routes.router, prefix="/auth", tags=["Autenticación"])
 app.include_router(post_routes.router, prefix="/posts", tags=["Publicaciones"])
 app.include_router(comment_routes.router, prefix="/comments", tags=["Comentarios"])
+app.include_router(reaction_routes.router, prefix="/reactions", tags=["Reacciones"])
 
 @app.get("/")
 def index():
