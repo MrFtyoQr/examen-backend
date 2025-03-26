@@ -34,6 +34,7 @@ def actualizar_post(id: str, user_id: str, data):
     resultado = posts.update_one(filtro, actualizacion)
     return resultado.modified_count > 0
 
+
 def eliminar_post(id: str, user_id: str):
     resultado = posts.delete_one({"_id": ObjectId(id), "id_usuario": user_id})
     return resultado.deleted_count > 0

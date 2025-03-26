@@ -1,5 +1,6 @@
 import gridfs
 from bson import ObjectId
+from io import BytesIO
 from app.database.connection import db
 
 fs = gridfs.GridFS(db)
@@ -14,5 +15,13 @@ def guardar_archivo(file) -> str:
     return str(archivo_id)
 
 def obtener_archivo(archivo_id: str):
+    archivo = fs.get(ObjectId(archivo_id))  # GridOut object
+    return archivo, archivo.content_type, archivo.filename
+
+"""
+def obtener_archivo(archivo_id: str):
     archivo = fs.get(ObjectId(archivo_id))
-    return archivo.read(), archivo.content_type, archivo.filename
+    contenido = archivo.read()
+    return BytesIO(contenido), archivo.content_type, archivo.filename
+
+"""

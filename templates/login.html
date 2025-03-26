@@ -1,15 +1,41 @@
 {% extends "base.html" %}
 {% block content %}
 <h2>Iniciar Sesión</h2>
-<form method="post" action="/auth/login">
+<form id="login-form">
     <div class="mb-3">
         <label for="correo" class="form-label">Correo Electrónico</label>
-        <input type="email" class="form-control" id="correo" name="correo" required>
+        <input type="email" class="form-control" id="correo" required>
     </div>
     <div class="mb-3">
         <label for="contraseña" class="form-label">Contraseña</label>
-        <input type="password" class="form-control" id="contraseña" name="contraseña" required>
+        <input type="password" class="form-control" id="contraseña" required>
     </div>
     <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
 </form>
+
+<script>
+document.getElementById("login-form").addEventListener("submit", async function(e) {
+    e.preventDefault();
+    
+    const correo = document.getElementById("correo").value;
+    const contraseña = document.getElementById("contraseña").value;
+
+    const response = await fetch("/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ correo, contraseña })
+    });
+
+    const data = await response.json();
+
+    if (data.success) {
+        // Guardamos el ID del usuario para publicaciones y comentarios
+        localStorage.setItem("user_id", data.user_id);
+        // Redirigir al feed
+        window.location.href = "/";
+    } else {
+        alert("Credenciales incorrectas");
+    }
+});
+</script>
 {% endblock %}

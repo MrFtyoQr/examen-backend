@@ -7,6 +7,7 @@ from app.database.gridfs_handler import obtener_archivo
 from app.services.post_service import obtener_posts
 from app.services.comment_service import obtener_comentarios
 from app.services.reaction_service import obtener_reacciones
+from io import BytesIO
 
 app = FastAPI()
 
@@ -35,4 +36,13 @@ def index(request: Request):
 @app.get("/posts/archivo/{archivo_id}")
 def descargar_archivo(archivo_id: str):
     contenido, content_type, nombre = obtener_archivo(archivo_id)
-    return StreamingResponse(content=contenido, media_type=content_type, headers={"Content-Disposition": f"attachment; filename={nombre}"})
+
+    # ✅ Si contenido es tipo bytes
+    if isinstance(contenido, bytes):
+        contenido = BytesIO(contenido)
+
+    return StreamingResponse(
+        content=contenido,
+        media_type=content_type,
+        headers={"Content-Disposition": f"attachment; filename={nombre}"}
+    )
