@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block content %}
+<h2 class="text-center mb-4">Feed de Publicaciones</h2>
+<div class="mb-4">
+    <form method="post" action="/posts/" enctype="multipart/form-data">
+        <div class="mb-3">
+            <label for="titulo" class="form-label">Título</label>
+            <input type="text" class="form-control" id="titulo" name="titulo" required>
+        </div>
+        <div class="mb-3">
+            <label for="descripcion" class="form-label">Descripción</label>
+            <textarea class="form-control" id="descripcion" name="descripcion" rows="3" required></textarea>
+        </div>
+        <div class="mb-3">
+            <label for="archivo" class="form-label">Archivo (PDF, JPG, MP4)</label>
+            <input type="file" class="form-control" id="archivo" name="archivo" accept=".pdf,.jpg,.jpeg,.mp4">
+        </div>
+        <button type="submit" class="btn btn-primary">Publicar</button>
+    </form>
+</div>
+<div>
+    {% for post in posts %}
+    <div class="card mb-3">
+        <div class="card-body">
+            <h5 class="card-title">{{ post.titulo }}</h5>
+            <p class="card-text">{{ post.descripcion }}</p>
+            {% if post.archivo_id %}
+            <p><a href="/posts/archivo/{{ post.archivo_id }}" target="_blank">Descargar archivo</a></p>
+            {% endif %}
+            <p class="card-text"><small class="text-muted">Publicado por {{ post.id_usuario }}</small></p>
+            <hr>
+            <div>
+                <strong>Reacciones:</strong>
+                <span>👍 {{ post.reacciones.like | default(0) }}</span>
+                <span>❤️ {{ post.reacciones.love | default(0) }}</span>
+                <span>🔥 {{ post.reacciones.fire | default(0) }}</span>
+            </div>
+            <hr>
+            <div>
+                <strong>Comentarios:</strong>
+                {% for comentario in post.comentarios %}
+                <p><strong>{{ comentario.usuario }}:</strong> {{ comentario.contenido }}</p>
+                {% endfor %}
+                <form method="post" action="/comments/">
+                    <input type="hidden" name="id_publicacion" value="{{ post.id }}">
+                    <div class="mb-3">
+                        <textarea class="form-control" name="contenido" rows="2" placeholder="Escribe un comentario..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-secondary btn-sm">Comentar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

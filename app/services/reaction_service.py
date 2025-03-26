@@ -24,9 +24,11 @@ def agregar_reaccion(data):
 
 
 def obtener_reacciones(id_publicacion: str):
-    filtro = {"id_publicacion": ObjectId(id_publicacion)}
-    print(f"Filtro usado en MongoDB: {filtro}")  # 🔍 Debug
-    return list(reactions.find(filtro))
+    reacciones = reactions.aggregate([
+        {"$match": {"id_publicacion": ObjectId(id_publicacion)}},
+        {"$group": {"_id": "$tipo", "count": {"$sum": 1}}}
+    ])
+    return {r["_id"]: r["count"] for r in reacciones}
 
 def eliminar_reaccion(id_reaccion: str, id_usuario: str):
     print(f"Intentando eliminar reacción con id: {id_reaccion} y id_usuario: {id_usuario}")  # 🔍 Debug
