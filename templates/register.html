@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Registrarse</h2>
+<form method="post" action="/auth/register">
+    <div class="mb-3">
+        <label for="nombre" class="form-label">Nombre</label>
+        <input type="text" class="form-control" id="nombre" name="nombre" required>
+    </div>
+    <div class="mb-3">
+        <label for="correo" class="form-label">Correo Electrónico</label>
+        <input type="email" class="form-control" id="correo" name="correo" required>
+    </div>
+    <div class="mb-3">
+        <label for="contraseña" class="form-label">Contraseña</label>
+        <input type="password" class="form-control" id="contraseña" name="contraseña" required>
+    </div>
+    <div class="mb-3">
+        <label for="carrera" class="form-label">Carrera</label>
+        <select class="form-select" id="carrera" name="carrera" required>
+            <option value="Desarrollo de Software">Desarrollo de Software</option>
+            <option value="Desarrollo de Negocios">Desarrollo de Negocios</option>
+            <option value="Gastronomía">Gastronomía</option>
+            <option value="Mantenimiento Industrial">Mantenimiento Industrial</option>
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Registrarse</button>
+</form>
+{% endblock %}

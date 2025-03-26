@@ -1,5 +1,6 @@
 from bson import ObjectId
 from app.database.connection import db
+from app.database.gridfs_handler import guardar_archivo
 
 posts = db["publicaciones"]
 

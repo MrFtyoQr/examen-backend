@@ -23,12 +23,12 @@ def crear_comentario(data):
         return {"error": str(e)}, 500
 
 
-def obtener_comentarios(id_publicacion):
+def obtener_comentarios(id_publicacion: str):
     comentarios = list(comments.find({"id_publicacion": ObjectId(id_publicacion)}))
     for comentario in comentarios:
-        comentario["_id"] = str(comentario["_id"])  # Convertir ObjectId a string
-        comentario["id_usuario"] = str(comentario["id_usuario"])  # Convertir el ID del usuario
-        comentario["id_publicacion"] = str(comentario["id_publicacion"])  # Convertir el ID de la publicación
+        comentario["id"] = str(comentario["_id"])
+        comentario["id_usuario"] = str(comentario["id_usuario"])
+        comentario["id_publicacion"] = str(comentario["id_publicacion"])
     return comentarios
 
 def eliminar_comentario(id: str, id_usuario: str):
