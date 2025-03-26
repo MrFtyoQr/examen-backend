@@ -1,6 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+
 <h2 class="text-center mb-4 text-primary">Feed de Publicaciones</h2>
 
-<div class="card shadow-sm mb-5">
+<!-- Formulario para publicar (solo visible si hay sesión) -->
+<div class="card shadow-sm mb-5" id="form-publicacion" style="display: none;">
     <div class="card-body">
         <h5 class="card-title">📤 Nueva Publicación</h5>
         <form method="post" action="/posts/" enctype="multipart/form-data">
@@ -23,6 +27,12 @@
         </form>
     </div>
 </div>
+
+<!-- Alerta si no hay sesión -->
+<div class="alert alert-warning text-center" id="alerta-sesion" style="display: none;">
+    Inicia sesión para poder publicar contenido.
+</div>
+
 
 <script>
 window.addEventListener("DOMContentLoaded", () => {
@@ -63,6 +73,7 @@ window.addEventListener("DOMContentLoaded", () => {
                 <p><strong>{{ comentario.usuario }}:</strong> {{ comentario.contenido }}</p>
                 {% endfor %}
 
+
                 <form method="post" action="/comments/">
                     <input type="hidden" name="id_publicacion" value="{{ post.id }}">
                     <input type="hidden" name="id_usuario" id="comentario_user_{{ post.id }}">
@@ -78,15 +89,26 @@ window.addEventListener("DOMContentLoaded", () => {
 </div>
 
 <script>
-// También rellenamos el ID de usuario para los formularios de comentario
-window.addEventListener("DOMContentLoaded", () => {
-    const userId = localStorage.getItem("user_id");
-    document.querySelectorAll('input[id^="comentario_user_"]').forEach(input => {
-        input.value = userId;
-    });
-});
-</script>
+    window.addEventListener("DOMContentLoaded", () => {
+        const userId = localStorage.getItem("user_id");
+        const carrera = localStorage.getItem("carrera");
+    
+        if (userId) {
+            document.getElementById("form-publicacion").style.display = "block";
+            document.getElementById("id_usuario_publicacion").value = userId;
+            if (carrera) {
+                document.getElementById("carrera_publicacion").value = carrera;
+            }
 
-<head>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
+        } else {
+            document.getElementById("alerta-sesion").style.display = "block";
+        }
+    
+        // Comentarios
+        document.querySelectorAll('input[id^="comentario_user_"]').forEach(input => {
+            input.value = userId || "";
+        });
+    });
+    </script>
+    
+{% endblock %}

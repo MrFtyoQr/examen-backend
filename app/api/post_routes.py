@@ -3,6 +3,7 @@ from app.models.post_model import PostCreate
 from app.services.post_service import crear_post, obtener_posts, obtener_post, actualizar_post, eliminar_post
 from app.database.gridfs_handler import guardar_archivo, obtener_archivo
 from fastapi.responses import StreamingResponse
+from fastapi.responses import RedirectResponse
 from bson import ObjectId
 
 router = APIRouter()
@@ -26,10 +27,10 @@ async def crear_publicacion(
         id_usuario=id_usuario
     )
 
-    post = crear_post(data, archivo_id)
-    post["id"] = str(post["_id"])
-    del post["_id"]
-    return post
+    crear_post(data, archivo_id)
+
+    return RedirectResponse(url="/", status_code=303)
+
 
 @router.get("/")
 def listar_publicaciones():
