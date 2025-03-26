@@ -9,12 +9,9 @@ from fastapi.templating import Jinja2Templates
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
 
-@router.post("/register")
-async def register(user: UserRegister):
-    result = register_user(user)
-    if result["success"]:
-        return RedirectResponse(url="/auth/login", status_code=303)
-    return {"error": result["message"]}
+@router.get("/register")
+async def register_get(request: Request):
+    return templates.TemplateResponse("register.html", {"request": request})
 
 @router.get("/login")
 async def login_get(request: Request):
